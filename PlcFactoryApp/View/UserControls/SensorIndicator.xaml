@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="PlcFactoryApp.View.UserControls.SensorIndicator"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PlcFactoryApp.View.UserControls"
+             xmlns:vms="clr-namespace:PlcFactoryApp.ViewModel.UserControls"
+             xmlns:c="clr-namespace:PlcFactoryApp.ViewModel.Converters"
+             x:Name="Root"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=local:SensorIndicator}"
+             d:DesignHeight="20" d:DesignWidth="100">
+    <UserControl.Resources>
+        <c:StateToBackgroundConverter x:Key="StateToBackgroundConverter"></c:StateToBackgroundConverter>
+    </UserControl.Resources>
+    <Grid Background="{Binding SensorState, Converter={StaticResource StateToBackgroundConverter}, ElementName=Root}">
+        <TextBlock Margin="10" TextAlignment="Center" Text="{Binding SensorName, ElementName=Root}"></TextBlock>
+    </Grid>
+</UserControl>

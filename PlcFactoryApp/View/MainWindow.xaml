@@ -1,0 +1,60 @@
+﻿<Window x:Class="PlcFactoryApp.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlcFactoryApp"
+        xmlns:vms="clr-namespace:PlcFactoryApp.ViewModel"
+        xmlns:userControls="clr-namespace:PlcFactoryApp.View.UserControls"
+        mc:Ignorable="d"
+        x:Name="Wnd"
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        Title="{Binding Title}" Height="350" Width="525">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.ColumnSpan="2">
+            <MenuItem Header="Simulator">
+                <MenuItem Header="Connect" Command="{Binding MainWindowCommands.ConnectCommand}"></MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="S5 Counters">
+            <DockPanel LastChildFill="False">
+                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.S5CountersImplementation.LoadProductCommand}">Load product</Button>
+                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.S5CountersImplementation.UnladProductCommand}">Unload product</Button>
+                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.S5CountersImplementation.ResetStorageCommand}">Reset storage</Button>
+
+                <userControls:StorageIndicator
+                    Sensor1Name="{Binding ElementName=Wnd, Path=DataContext.Storage1.FullSensorName}"
+                    Sensor1State="{Binding ElementName=Wnd, Path=DataContext.Storage1.FullSensorState}"
+                    Sensor2Name="{Binding ElementName=Wnd, Path=DataContext.Storage1.EmptySensorName}"
+                    Sensor2State="{Binding ElementName=Wnd, Path=DataContext.Storage1.EmptySensorState}"
+                    ProductsCount="{Binding ElementName=Wnd, Path=DataContext.Storage1.ProductsCount}"
+                    DockPanel.Dock="Bottom"></userControls:StorageIndicator>
+            </DockPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="1" Header="IEC Counters">
+            <DockPanel LastChildFill="False">
+                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.IecCountersImplementation.LoadProductCommand}">Load product</Button>
+                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.IecCountersImplementation.UnladProductCommand}">Unload product</Button>
+                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.IecCountersImplementation.ResetStorageCommand}">Reset storage</Button>
+
+                <userControls:StorageIndicator
+                    Sensor2State="{Binding DataContext.Storage2.EmptySensorState, ElementName=Wnd}" 
+                    Sensor2Name="{Binding DataContext.Storage2.EmptySensorName, ElementName=Wnd}"
+                    Sensor1Name="{Binding DataContext.Storage2.FullSensorName, ElementName=Wnd}" 
+                    Sensor1State="{Binding DataContext.Storage2.FullSensorState, ElementName=Wnd}"
+                    DockPanel.Dock="Bottom" ProductsCount="{Binding DataContext.Storage2.ProductsCount, ElementName=Wnd}"></userControls:StorageIndicator>
+            </DockPanel>
+        </GroupBox>
+    </Grid>
+</Window>
