@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
+using PlcFactoryApp.Core.Models;
 
 namespace PlcFactoryApp.ViewModel.UserControls
 {
@@ -15,6 +16,7 @@ namespace PlcFactoryApp.ViewModel.UserControls
         private int _productsCount;
         private SensorState _fullSensorState;
         private SensorState _emptySensorState;
+        private PinConfig _pinConfig;
 
         public StorageIndicatorViewModel()
         {
@@ -24,6 +26,15 @@ namespace PlcFactoryApp.ViewModel.UserControls
 
             FullSensorState = SensorState.Deactivated;
             EmptySensorState = SensorState.Deactivated;
+
+            PinConfig = new PinConfig()
+            {
+                LoadProductPin = new PinAddress()
+                {
+                    ByteAddress = 0,
+                    BitAddress = 4
+                }
+            };
         }
 
         public string FullSensorName
@@ -73,6 +84,16 @@ namespace PlcFactoryApp.ViewModel.UserControls
             {
                 _emptySensorState = value;
                 RaisePropertyChanged(nameof(EmptySensorState));
+            }
+        }
+
+        public PinConfig PinConfig
+        {
+            get { return _pinConfig; }
+            set
+            {
+                _pinConfig = value;
+                RaisePropertyChanged(nameof(PinConfig));
             }
         }
     }

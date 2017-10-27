@@ -4,25 +4,57 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using PlcFactoryApp.Core;
+using PlcFactoryApp.Core.Models;
 using PlcFactoryApp.ViewModel.Contracts;
 
 namespace PlcFactoryApp.ViewModel
 {
-    public class AbstractCountersImplementation : ICountersImplementation
+    public abstract class AbstractCountersImplementation : ICountersImplementation
     {
-        public ICommand LoadProductCommand { get; set; } = new RelayCommand(() =>
+        protected IPlcSimulator PlcSimulatorInst;
+
+        protected AbstractCountersImplementation(IPlcSimulator simulator)
         {
+            PlcSimulatorInst = simulator;
+            PlcSimulatorInst.BeforeStatusUpdatedEventHandler = BeforeStatusUpdate;
 
-        });
+            LoadProductCommand = new RelayCommand(() =>
+            {
+                PlcSimulatorInst.PinConfig = UpdatePinConfig();
+                PlcSimulatorInst.LoadProduct();
+            });
 
-        public ICommand UnladProductCommand { get; set; } = new RelayCommand(() =>
+            UnloadProductCommand = new RelayCommand(() =>
+            {
+                PlcSimulatorInst.PinConfig = UpdatePinConfig();
+                PlcSimulatorInst.UnloadProduct();
+            });
+
+            ResetStorageCommand = new RelayCommand(() =>
+            {
+                PlcSimulatorInst.PinConfig = UpdatePinConfig();
+                PlcSimulatorInst.ResetStorage();
+            });
+        }
+
+        protected abstract PinConfig UpdatePinConfig();
+
+        public virtual ICommand LoadProductCommand { get; set; }
+
+        public virtual ICommand UnloadProductCommand { get; set; }
+
+        public virtual ICommand ResetStorageCommand { get; set; }
+        public abstract PinConfig PublicPinConfig { get; set; }
+        public void ResetAll()
         {
+            PlcSimulatorInst.PinConfig = UpdatePinConfig();
+            PlcSimulatorInst.ResetAll();
+        }
 
-        });
-
-        public ICommand ResetStorageCommand { get; set; } = new RelayCommand(() =>
+        private void BeforeStatusUpdate(object sender, EventArgs statusUpdateEventArgs)
         {
-            
-        });
+            UpdatePinConfig();
+        }
     }
 }

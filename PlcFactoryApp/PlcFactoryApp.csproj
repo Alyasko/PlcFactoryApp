@@ -71,12 +71,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\IPlcSimulator.cs" />
+    <Compile Include="Core\Models\PinAddress.cs" />
+    <Compile Include="Core\Models\PinConfig.cs" />
     <Compile Include="Core\PlcSimulator.cs" />
+    <Compile Include="Core\StatusUpdateEventArgs.cs" />
     <Compile Include="ViewModel\AbstractCountersImplementation.cs" />
     <Compile Include="ViewModel\Contracts\ICountersImplementation.cs" />
+    <Compile Include="ViewModel\Converters\PinConfigToStringConverter.cs" />
     <Compile Include="ViewModel\Converters\StateToBackgroundConverter.cs" />
+    <Compile Include="ViewModel\IecCountersImplementation.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindowCommands.cs" />
+    <Compile Include="ViewModel\S5CountersImplementation.cs" />
     <Compile Include="ViewModel\UserControls\SensorIndicatorViewModel.cs" />
     <Compile Include="ViewModel\UserControls\SensorState.cs" />
     <Compile Include="ViewModel\UserControls\StorageIndicatorViewModel.cs" />

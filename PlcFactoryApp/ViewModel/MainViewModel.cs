@@ -1,4 +1,8 @@
+using System;
+using System.Windows;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
+using PlcFactoryApp.Core;
 using PlcFactoryApp.ViewModel.UserControls;
 
 namespace PlcFactoryApp.ViewModel
@@ -17,6 +21,8 @@ namespace PlcFactoryApp.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private IPlcSimulator _simulator;
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -31,12 +37,43 @@ namespace PlcFactoryApp.ViewModel
 
             }
 
-            Title = "PLC Factory App";
+            Initialize();
+        }
 
-            Storage1 = new StorageIndicatorViewModel();
-            Storage2 = new StorageIndicatorViewModel();
+        private void Initialize()
+        {
+            try
+            {
 
-            MainWindowCommands = new MainWindowCommands(this);
+                Title = "PLC Factory App";
+
+                Storage1 = new StorageIndicatorViewModel();
+                Storage2 = new StorageIndicatorViewModel();
+
+                _simulator = new PlcSimulator();
+                _simulator.StatusUpdatedEventHandler = StatusUpdatedEventHandler;
+
+                _simulator.Initialize();
+
+                MainWindowCommands = new MainWindowCommands(this, _simulator);
+            }
+            catch (Exception e)
+            {
+                if(!IsInDesignMode)
+                    MessageBox.Show($"Unable to start program. Error occured.\n{e.Message}\n{e.StackTrace}");
+            }
+
+        }
+
+        private void StatusUpdatedEventHandler(object sender, StatusUpdateEventArgs statusUpdateEventArgs)
+        {
+            Storage1.EmptySensorState = statusUpdateEventArgs.S5EmptySensorState;
+            Storage1.FullSensorState = statusUpdateEventArgs.S5FullSensorState;
+
+            Storage2.EmptySensorState = statusUpdateEventArgs.IecEmptySensorState;
+            Storage2.FullSensorState = statusUpdateEventArgs.IecFullSensorState;
+
+            Storage1.ProductsCount = statusUpdateEventArgs.ProductsCount;
         }
 
         public string Title { get; set; }

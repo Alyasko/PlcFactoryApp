@@ -23,6 +23,6 @@
         <local:SensorIndicator SensorState="{Binding Sensor2State, ElementName=Root}" SensorName="{Binding Sensor2Name, ElementName=Root}" Grid.Row="0" Grid.Column="1">
         </local:SensorIndicator>
 
-        <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Value="{Binding ProductsCount}" Height="20"></ProgressBar>
+        <ProgressBar Visibility="Collapsed" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Value="{Binding ProductsCount}" Height="20"></ProgressBar>
     </Grid>
 </UserControl>
