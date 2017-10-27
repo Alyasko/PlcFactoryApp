@@ -32,10 +32,8 @@ namespace PlcFactoryApp.Core
 
             var ea = new StatusUpdateEventArgs
             {
-                S5EmptySensorState = ReadOutputPin(S5CountersImplementation.S5PublicPinConfig.StockEmptyPin) ? SensorState.Activated : SensorState.Deactivated,
-                S5FullSensorState = ReadOutputPin(S5CountersImplementation.S5PublicPinConfig.StockFullPin) ? SensorState.Activated : SensorState.Deactivated,
-                IecEmptySensorState = ReadOutputPin(IecCountersImplementation.IecPublicPinConfig.StockEmptyPin) ? SensorState.Activated : SensorState.Deactivated,
-                IecFullSensorState = ReadOutputPin(IecCountersImplementation.IecPublicPinConfig.StockFullPin) ? SensorState.Activated : SensorState.Deactivated,
+                EmptySensorState = ReadOutputPin(PinConfig.StockEmptyPin) ? SensorState.Activated : SensorState.Deactivated,
+                FullSensorState = ReadOutputPin(PinConfig.StockFullPin) ? SensorState.Activated : SensorState.Deactivated,
 
                 ProductsCount = 0
             };

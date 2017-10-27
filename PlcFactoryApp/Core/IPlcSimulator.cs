@@ -6,7 +6,6 @@ namespace PlcFactoryApp.Core
     public interface IPlcSimulator
     {
         EventHandler<StatusUpdateEventArgs> StatusUpdatedEventHandler { get; set; }
-        EventHandler BeforeStatusUpdatedEventHandler { get; set; }
 
         void Connect();
         void Initialize();

@@ -9,18 +9,14 @@
         xmlns:userControls="clr-namespace:PlcFactoryApp.View.UserControls"
         mc:Ignorable="d"
         x:Name="Wnd"
-        MinHeight="380"
-        MinWidth="545"
+        MinHeight="440"
+        MinWidth="300"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        Title="{Binding Title}" Height="382" Width="543">
+        Title="{Binding Title}" Height="440" Width="300">
     <Window.Resources>
         <c:PinConfigToStringConverter x:Key="pinConfigToStringConverter"></c:PinConfigToStringConverter>
     </Window.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -32,13 +28,15 @@
             </MenuItem>
         </Menu>
 
-        <GroupBox Grid.Row="1" Grid.Column="0" Header="S5 Counters">
+        <GroupBox Grid.Row="1" Header="Counters">
             <DockPanel LastChildFill="False">
-                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.S5CountersImplementation.LoadProductCommand}">Load product</Button>
-                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.S5CountersImplementation.UnloadProductCommand}">Unload product</Button>
-                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.S5CountersImplementation.ResetStorageCommand}">Reset storage</Button>
+                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.CountersImplementation.LoadProductCommand}">Load product</Button>
+                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.CountersImplementation.UnloadProductCommand}">Unload product</Button>
+                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.CountersImplementation.ResetStorageCommand}">Reset storage</Button>
+                
+                <Button DockPanel.Dock="Top" Margin="5, 15, 5, 5" Command="{Binding MainWindowCommands.ConnectCommand}">Connect</Button>
 
-                <Grid DockPanel.Dock="Top">
+                <Grid DockPanel.Dock="Top" IsEnabled="{Binding DataContext.IsEditMode, ElementName=Wnd, UpdateSourceTrigger=PropertyChanged}">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
@@ -52,11 +50,11 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Margin="5" Grid.Row="0" Grid.Column="0">Load product (byte, bit)</TextBlock>
-                    <TextBox Text="{Binding DataContext.Storage1.PinConfig.LoadProductPin, ElementName=Wnd, Converter={StaticResource pinConfigToStringConverter}}" Margin="5" Grid.Row="0" Grid.Column="1">
+                    <TextBox Text="{Binding DataContext.Storage.PinConfig.LoadProductPin, ElementName=Wnd, Converter={StaticResource pinConfigToStringConverter}}" Margin="5" Grid.Row="0" Grid.Column="1">
                     </TextBox>
 
                     <TextBlock Margin="5" Grid.Row="1" Grid.Column="0">Unload product (byte, bit)</TextBlock>
-                    <TextBox Text="{Binding DataContext.Storage1.PinConfig.UnloadProductPin, ElementName=Wnd}" Margin="5" Grid.Row="1" Grid.Column="1"></TextBox>
+                    <TextBox Text="{Binding DataContext.Storage.PinConfig.UnloadProductPin, ElementName=Wnd}" Margin="5" Grid.Row="1" Grid.Column="1"></TextBox>
 
                     <TextBlock Margin="5" Grid.Row="2" Grid.Column="0">Reset storage (byte, bit)</TextBlock>
                     <TextBox Margin="5" Grid.Row="2" Grid.Column="1"></TextBox>
@@ -69,56 +67,13 @@
                 </Grid>
 
                 <userControls:StorageIndicator
-                    Sensor1Name="{Binding ElementName=Wnd, Path=DataContext.Storage1.FullSensorName}"
-                    Sensor1State="{Binding ElementName=Wnd, Path=DataContext.Storage1.FullSensorState}"
-                    Sensor2Name="{Binding ElementName=Wnd, Path=DataContext.Storage1.EmptySensorName}"
-                    Sensor2State="{Binding ElementName=Wnd, Path=DataContext.Storage1.EmptySensorState}"
+                    Sensor1Name="{Binding ElementName=Wnd, Path=DataContext.Storage.FullSensorName}"
+                    Sensor1State="{Binding ElementName=Wnd, Path=DataContext.Storage.FullSensorState}"
+                    Sensor2Name="{Binding ElementName=Wnd, Path=DataContext.Storage.EmptySensorName}"
+                    Sensor2State="{Binding ElementName=Wnd, Path=DataContext.Storage.EmptySensorState}"
                     DockPanel.Dock="Bottom"></userControls:StorageIndicator>
             </DockPanel>
         </GroupBox>
 
-        <GroupBox Grid.Row="1" Grid.Column="1" Header="IEC Counters">
-            <DockPanel LastChildFill="False">
-                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.IecCountersImplementation.LoadProductCommand}">Load product</Button>
-                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.IecCountersImplementation.UnloadProductCommand}">Unload product</Button>
-                <Button DockPanel.Dock="Top" Command="{Binding MainWindowCommands.IecCountersImplementation.ResetStorageCommand}">Reset storage</Button>
-
-                <Grid DockPanel.Dock="Top">
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="0">Load product (byte, bit)</TextBlock>
-                    <TextBox Margin="5" Grid.Row="0" Grid.Column="1"></TextBox>
-
-                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="0">Unload product (byte, bit)</TextBlock>
-                    <TextBox Margin="5" Grid.Row="1" Grid.Column="1"></TextBox>
-
-                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="0">Reset storage (byte, bit)</TextBlock>
-                    <TextBox Margin="5" Grid.Row="2" Grid.Column="1"></TextBox>
-
-                    <TextBlock Margin="5" Grid.Row="3" Grid.Column="0">Emtpy storage (byte, bit)</TextBlock>
-                    <TextBox Margin="5" Grid.Row="3" Grid.Column="1"></TextBox>
-
-                    <TextBlock Margin="5" Grid.Row="4" Grid.Column="0">Full storage (byte, bit)</TextBlock>
-                    <TextBox Margin="5" Grid.Row="4" Grid.Column="1"></TextBox>
-                </Grid>
-
-                <userControls:StorageIndicator
-                    Sensor2State="{Binding DataContext.Storage2.EmptySensorState, ElementName=Wnd}" 
-                    Sensor2Name="{Binding DataContext.Storage2.EmptySensorName, ElementName=Wnd}"
-                    Sensor1Name="{Binding DataContext.Storage2.FullSensorName, ElementName=Wnd}" 
-                    Sensor1State="{Binding DataContext.Storage2.FullSensorState, ElementName=Wnd}"
-                    DockPanel.Dock="Bottom"></userControls:StorageIndicator>
-            </DockPanel>
-        </GroupBox>
     </Grid>
 </Window>

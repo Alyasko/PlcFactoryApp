@@ -44,11 +44,9 @@ namespace PlcFactoryApp.ViewModel
         {
             try
             {
-
                 Title = "PLC Factory App";
 
-                Storage1 = new StorageIndicatorViewModel();
-                Storage2 = new StorageIndicatorViewModel();
+                Storage = new StorageIndicatorViewModel();
 
                 _simulator = new PlcSimulator();
                 _simulator.StatusUpdatedEventHandler = StatusUpdatedEventHandler;
@@ -56,10 +54,12 @@ namespace PlcFactoryApp.ViewModel
                 _simulator.Initialize();
 
                 MainWindowCommands = new MainWindowCommands(this, _simulator);
+
+                IsEditMode = true;
             }
             catch (Exception e)
             {
-                if(!IsInDesignMode)
+                if (!IsInDesignMode)
                     MessageBox.Show($"Unable to start program. Error occured.\n{e.Message}\n{e.StackTrace}");
             }
 
@@ -67,29 +67,30 @@ namespace PlcFactoryApp.ViewModel
 
         private void StatusUpdatedEventHandler(object sender, StatusUpdateEventArgs statusUpdateEventArgs)
         {
-            Storage1.EmptySensorState = statusUpdateEventArgs.S5EmptySensorState;
-            Storage1.FullSensorState = statusUpdateEventArgs.S5FullSensorState;
+            Storage.EmptySensorState = statusUpdateEventArgs.EmptySensorState;
+            Storage.FullSensorState = statusUpdateEventArgs.FullSensorState;
 
-            Storage2.EmptySensorState = statusUpdateEventArgs.IecEmptySensorState;
-            Storage2.FullSensorState = statusUpdateEventArgs.IecFullSensorState;
-
-            Storage1.ProductsCount = statusUpdateEventArgs.ProductsCount;
+            Storage.ProductsCount = statusUpdateEventArgs.ProductsCount;
         }
 
         public string Title { get; set; }
 
-        private StorageIndicatorViewModel _storage1;
-        public StorageIndicatorViewModel Storage1
+        private StorageIndicatorViewModel _storage;
+        public StorageIndicatorViewModel Storage
         {
-            get => _storage1;
-            set { _storage1 = value; } 
+            get => _storage;
+            set { _storage = value; }
         }
 
-        private StorageIndicatorViewModel _storage2;
-        public StorageIndicatorViewModel Storage2
+        private bool _isConnected;
+        public bool IsEditMode
         {
-            get => _storage2;
-            set { _storage2 = value; }
+            get => _isConnected;
+            set
+            {
+                _isConnected = value;
+                RaisePropertyChanged(nameof(IsEditMode));
+            }
         }
 
         public MainWindowCommands MainWindowCommands { get; set; }

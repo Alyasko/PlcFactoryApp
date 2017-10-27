@@ -20,16 +20,16 @@ namespace PlcFactoryApp.ViewModel
             _vm = vm;
             _simulator = simulator;
 
-            S5CountersImplementation = new S5CountersImplementation(simulator);
-            IecCountersImplementation = new IecCountersImplementation(simulator);
+            CountersImplementation = new CountersImplementation(simulator);
 
             ConnectCommand = new RelayCommand(() =>
             {
                 try
                 {
                     _simulator.Connect();
-                    S5CountersImplementation.ResetAll();
-                    IecCountersImplementation.ResetAll();
+                    _simulator.ResetAll();
+
+                    _vm.IsEditMode = false;
                 }
                 catch (Exception e)
                 {
@@ -40,7 +40,6 @@ namespace PlcFactoryApp.ViewModel
 
         public ICommand ConnectCommand { get; set; }
 
-        public ICountersImplementation S5CountersImplementation { get; set; }
-        public ICountersImplementation IecCountersImplementation { get; set; }
+        public ICountersImplementation CountersImplementation { get; set; }
     }
 }

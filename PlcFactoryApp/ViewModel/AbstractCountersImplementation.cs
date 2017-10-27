@@ -17,44 +17,27 @@ namespace PlcFactoryApp.ViewModel
         protected AbstractCountersImplementation(IPlcSimulator simulator)
         {
             PlcSimulatorInst = simulator;
-            PlcSimulatorInst.BeforeStatusUpdatedEventHandler = BeforeStatusUpdate;
 
             LoadProductCommand = new RelayCommand(() =>
             {
-                PlcSimulatorInst.PinConfig = UpdatePinConfig();
                 PlcSimulatorInst.LoadProduct();
             });
 
             UnloadProductCommand = new RelayCommand(() =>
             {
-                PlcSimulatorInst.PinConfig = UpdatePinConfig();
                 PlcSimulatorInst.UnloadProduct();
             });
 
             ResetStorageCommand = new RelayCommand(() =>
             {
-                PlcSimulatorInst.PinConfig = UpdatePinConfig();
                 PlcSimulatorInst.ResetStorage();
             });
         }
-
-        protected abstract PinConfig UpdatePinConfig();
 
         public virtual ICommand LoadProductCommand { get; set; }
 
         public virtual ICommand UnloadProductCommand { get; set; }
 
         public virtual ICommand ResetStorageCommand { get; set; }
-        public abstract PinConfig PublicPinConfig { get; set; }
-        public void ResetAll()
-        {
-            PlcSimulatorInst.PinConfig = UpdatePinConfig();
-            PlcSimulatorInst.ResetAll();
-        }
-
-        private void BeforeStatusUpdate(object sender, EventArgs statusUpdateEventArgs)
-        {
-            UpdatePinConfig();
-        }
     }
 }

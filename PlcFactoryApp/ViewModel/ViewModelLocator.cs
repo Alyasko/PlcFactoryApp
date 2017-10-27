@@ -56,14 +56,6 @@ namespace PlcFactoryApp.ViewModel
             }
         }
 
-        public SensorIndicatorViewModel SensorIndicator
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<SensorIndicatorViewModel>();
-            }
-        }
-
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
