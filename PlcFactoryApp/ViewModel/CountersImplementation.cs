@@ -14,14 +14,7 @@ namespace PlcFactoryApp.ViewModel
     {
         public CountersImplementation(IPlcSimulator simulator) : base(simulator)
         {
-            PlcSimulatorInst.PinConfig = new PinConfig()
-            {
-                ResetControllerPin = new PinAddress() { ByteAddress = 0, BitAddress = 0 },
-                LoadProductPin = new PinAddress() { ByteAddress = 0, BitAddress = 1 },
-                UnloadProductPin = new PinAddress() { ByteAddress = 0, BitAddress = 2 },
-                StockFullPin = new PinAddress() { ByteAddress = 4, BitAddress = 0 },
-                StockEmptyPin = new PinAddress() { ByteAddress = 4, BitAddress = 1 }
-            };
+            
         }
     }
 }

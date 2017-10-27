@@ -30,5 +30,7 @@ namespace PlcFactoryApp.Core.Models
 
         public PinAddress StockEmptyPin { get; set; }
         public PinAddress StockFullPin { get; set; }
+
+        public PinAddress CounterValueByte { get; set; }
     }
 }

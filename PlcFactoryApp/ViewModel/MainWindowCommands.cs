@@ -26,6 +26,8 @@ namespace PlcFactoryApp.ViewModel
             {
                 try
                 {
+                    _simulator.PinConfig = _vm.Storage.PinConfig;
+
                     _simulator.Connect();
                     _simulator.ResetAll();
 

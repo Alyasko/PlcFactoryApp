@@ -29,16 +29,23 @@ namespace PlcFactoryApp.Core
         private void TimerCallback(object sender, EventArgs eventArgs)
         {
             // BeforeStatusUpdatedEventHandler?.Invoke(this, new EventArgs());
-
-            var ea = new StatusUpdateEventArgs
+            try
             {
-                EmptySensorState = ReadOutputPin(PinConfig.StockEmptyPin) ? SensorState.Activated : SensorState.Deactivated,
-                FullSensorState = ReadOutputPin(PinConfig.StockFullPin) ? SensorState.Activated : SensorState.Deactivated,
+                var ea = new StatusUpdateEventArgs
+                {
+                    EmptySensorState = ReadOutputPin(PinConfig.StockEmptyPin) ? SensorState.Activated : SensorState.Deactivated,
+                    FullSensorState = ReadOutputPin(PinConfig.StockFullPin) ? SensorState.Activated : SensorState.Deactivated,
+                    ProductsCount = ReadFlagValue(PinConfig.CounterValueByte.ByteAddress, 0)
+                };
 
-                ProductsCount = 0
-            };
+                StatusUpdatedEventHandler?.Invoke(this, ea);
+            }
+            catch (Exception e)
+            {
+                _dispatcherTimer.Stop();
+                MessageBox.Show(e.Message);
+            }
 
-            StatusUpdatedEventHandler?.Invoke(this, ea);
         }
 
         public void Connect()
@@ -72,6 +79,7 @@ namespace PlcFactoryApp.Core
 
         public void ResetStorage()
         {
+            // MessageBox.Show($"Addr: {PinConfig.CounterValueByte.ByteAddress}");
             BlinkInputPin(PinConfig.ResetControllerPin);
         }
 
@@ -98,20 +106,28 @@ namespace PlcFactoryApp.Core
             return (bool)pData;
         }
 
-        private short ReadDataBlock(Byte address)
+        private ushort ReadFlagValue(int byteAddress, int bitAddress)
         {
-            object pData = new short();
+            object pData = new ushort();
+            _proSim.ReadFlagValue(byteAddress, bitAddress, PointDataTypeConstants.S7_Byte, ref pData);
+
+            return Convert.ToUInt16(pData);
+        }
+
+        private int ReadDataBlock(int blockNumber, Byte byteAddress, Byte bitAddress)
+        {
+            object pData = new int();
 
             try
             {
-                _proSim.ReadDataBlockValue(1, address, 0, PointDataTypeConstants.S7_Word, ref pData);
+                _proSim.ReadDataBlockValue(blockNumber, byteAddress, bitAddress, PointDataTypeConstants.S7_Word, ref pData);
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
 
-            return (short)pData;
+            return (int)pData;
         }
 
         public void ResetAll()
@@ -127,7 +143,13 @@ namespace PlcFactoryApp.Core
         public void Initialize()
         {
             _proSim = new S7ProSim();
-            //_proSim.ConnectionError += ProSimOnConnectionError;
+            _proSim.ConnectionError += ProSimOnConnectionError;
+        }
+
+        [DispIdAttribute(100)]
+        private void ProSimOnConnectionError(string controlEngine, int error)
+        {
+            MessageBox.Show($"S7 Plc Connection Error.\n" + controlEngine);
         }
     }
 }

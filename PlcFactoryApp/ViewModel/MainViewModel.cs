@@ -90,7 +90,13 @@ namespace PlcFactoryApp.ViewModel
             {
                 _isConnected = value;
                 RaisePropertyChanged(nameof(IsEditMode));
+                RaisePropertyChanged(nameof(IsNotEditMode));
             }
+        }
+
+        public bool IsNotEditMode
+        {
+            get { return !IsEditMode; }
         }
 
         public MainWindowCommands MainWindowCommands { get; set; }
