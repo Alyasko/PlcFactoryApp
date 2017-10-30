@@ -6,25 +6,14 @@ using GalaSoft.MvvmLight;
 
 namespace PlcFactoryApp.Core.Models
 {
-    public class PinConfig : ViewModelBase
+    public class PinConfig
     {
-        private PinAddress _loadProductPin;
-
         public PinConfig()
         {
             
         }
 
-        public PinAddress LoadProductPin
-        {
-            get { return _loadProductPin; }
-            set
-            {
-                _loadProductPin = value;
-                RaisePropertyChanged(nameof(LoadProductPin));
-            }
-        }
-
+        public PinAddress LoadProductPin { get; set; }
         public PinAddress UnloadProductPin { get; set; }
         public PinAddress ResetControllerPin { get; set; }
 
