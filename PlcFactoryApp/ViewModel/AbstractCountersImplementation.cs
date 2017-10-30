@@ -12,25 +12,23 @@ namespace PlcFactoryApp.ViewModel
 {
     public abstract class AbstractCountersImplementation : ICountersImplementation
     {
-        protected IPlcSimulator PlcSimulatorInst;
-
         protected AbstractCountersImplementation(IPlcSimulator simulator)
         {
-            PlcSimulatorInst = simulator;
+            PlcSimulator = simulator;
 
             LoadProductCommand = new RelayCommand(() =>
             {
-                PlcSimulatorInst.LoadProduct();
+                PlcSimulator.LoadProduct();
             });
 
             UnloadProductCommand = new RelayCommand(() =>
             {
-                PlcSimulatorInst.UnloadProduct();
+                PlcSimulator.UnloadProduct();
             });
 
             ResetStorageCommand = new RelayCommand(() =>
             {
-                PlcSimulatorInst.ResetStorage();
+                PlcSimulator.ResetStorage();
             });
         }
 
@@ -39,5 +37,6 @@ namespace PlcFactoryApp.ViewModel
         public virtual ICommand UnloadProductCommand { get; set; }
 
         public virtual ICommand ResetStorageCommand { get; set; }
+        public IPlcSimulator PlcSimulator { get; set; }
     }
 }

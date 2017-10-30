@@ -10,5 +10,7 @@ namespace PlcFactoryApp.ViewModel.Contracts
         ICommand LoadProductCommand { get; set; }
         ICommand UnloadProductCommand { get; set; }
         ICommand ResetStorageCommand { get; set; }
+
+        IPlcSimulator PlcSimulator { get; set; }
     }
 }

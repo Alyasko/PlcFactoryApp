@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using PlcFactoryApp.Core;
@@ -42,20 +43,15 @@ namespace PlcFactoryApp.ViewModel
 
         private void Initialize()
         {
+            IsEditMode = true;
+
             try
             {
                 Title = "PLC Factory App";
 
                 Storage = new StorageIndicatorViewModel();
-
-                _simulator = new PlcSimulator();
-                _simulator.StatusUpdatedEventHandler = StatusUpdatedEventHandler;
-
-                _simulator.Initialize();
-
-                MainWindowCommands = new MainWindowCommands(this, _simulator);
-
-                IsEditMode = true;
+                MainWindowCommands = new MainWindowCommands(this);
+                MainWindowCommands.CountersImplementation = new CountersImplementation(null);
             }
             catch (Exception e)
             {
@@ -65,7 +61,7 @@ namespace PlcFactoryApp.ViewModel
 
         }
 
-        private void StatusUpdatedEventHandler(object sender, StatusUpdateEventArgs statusUpdateEventArgs)
+        public void StatusUpdatedEventHandler(object sender, StatusUpdateEventArgs statusUpdateEventArgs)
         {
             Storage.EmptySensorState = statusUpdateEventArgs.EmptySensorState;
             Storage.FullSensorState = statusUpdateEventArgs.FullSensorState;

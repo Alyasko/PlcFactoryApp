@@ -23,7 +23,7 @@ namespace PlcFactoryApp.Core
 
         public PlcSimulator()
         {
-            
+
         }
 
         private void TimerCallback(object sender, EventArgs eventArgs)
@@ -38,7 +38,7 @@ namespace PlcFactoryApp.Core
                     ProductsCount = ReadFlagValue(PinConfig.CounterValueByte.ByteAddress, 0)
                 };
 
-                StatusUpdatedEventHandler?.Invoke(this, ea);
+                ReportStatus(ea);
             }
             catch (Exception e)
             {
@@ -46,6 +46,11 @@ namespace PlcFactoryApp.Core
                 MessageBox.Show(e.Message);
             }
 
+        }
+
+        private void ReportStatus(StatusUpdateEventArgs eArg)
+        {
+            StatusUpdatedEventHandler?.Invoke(this, eArg);
         }
 
         public void Connect()
@@ -56,9 +61,7 @@ namespace PlcFactoryApp.Core
                 _proSim.BeginScanNotify();
                 _proSim.SetScanMode(ScanModeConstants.ContinuousScan);
 
-                if(_dispatcherTimer == null)
-                    _dispatcherTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.DataBind, TimerCallback, Dispatcher.CurrentDispatcher);
-
+                //_dispatcherTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.DataBind, TimerCallback, Dispatcher.CurrentDispatcher);
                 _dispatcherTimer.Start();
             }
             catch (Exception e)
@@ -144,12 +147,39 @@ namespace PlcFactoryApp.Core
         {
             _proSim = new S7ProSim();
             _proSim.ConnectionError += ProSimOnConnectionError;
+
+            if (_dispatcherTimer == null)
+            {
+                _dispatcherTimer = new DispatcherTimer();
+                _dispatcherTimer.Interval = TimeSpan.FromMilliseconds(500);
+                _dispatcherTimer.Tick += TimerCallback;
+            }
         }
 
         [DispIdAttribute(100)]
         private void ProSimOnConnectionError(string controlEngine, int error)
         {
             MessageBox.Show($"S7 Plc Connection Error.\n" + controlEngine);
+        }
+
+        public void Disconnect()
+        {
+            _dispatcherTimer.Stop();
+            //_dispatcherTimer = null;
+
+            ReportStatus(new StatusUpdateEventArgs()
+            {
+                EmptySensorState = SensorState.Deactivated,
+                FullSensorState = SensorState.Deactivated,
+                ProductsCount = 0
+            });
+
+            _proSim.Disconnect();
+        }
+
+        public void Dispose()
+        {
+            Disconnect();
         }
     }
 }

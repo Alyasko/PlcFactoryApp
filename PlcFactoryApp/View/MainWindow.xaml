@@ -34,7 +34,17 @@
                 <Button IsEnabled="{Binding IsNotEditMode, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" Command="{Binding MainWindowCommands.CountersImplementation.UnloadProductCommand}">Unload product</Button>
                 <Button IsEnabled="{Binding IsNotEditMode, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" Command="{Binding MainWindowCommands.CountersImplementation.ResetStorageCommand}">Reset storage</Button>
 
-                <Button IsEnabled="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" Margin="5, 15, 5, 5" Command="{Binding MainWindowCommands.ConnectCommand}">Connect</Button>
+                <Grid Margin="0, 5, 0, 0" DockPanel.Dock="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" IsEnabled="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" Margin="5, 5, 5, 5" Command="{Binding MainWindowCommands.ConnectCommand}">Connect</Button>
+                    <Button Grid.Column="1" IsEnabled="{Binding IsNotEditMode, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" Margin="5, 5, 5, 5" Command="{Binding MainWindowCommands.DisconnectCommand}">Disconnect</Button>
+
+                </Grid>
+                
 
                 <Grid DockPanel.Dock="Top" IsEnabled="{Binding DataContext.IsEditMode, ElementName=Wnd, UpdateSourceTrigger=PropertyChanged}">
                     <Grid.RowDefinitions>
@@ -78,7 +88,7 @@
                     Sensor2Name="{Binding ElementName=Wnd, Path=DataContext.Storage.EmptySensorName}"
                     Sensor2State="{Binding ElementName=Wnd, Path=DataContext.Storage.EmptySensorState}"
                     DockPanel.Dock="Bottom"></userControls:StorageIndicator>
-                <StackPanel Visibility="Collapsed" Margin="5" DockPanel.Dock="Bottom" Orientation="Horizontal">
+                <StackPanel Visibility="Visible" Margin="5" DockPanel.Dock="Bottom" Orientation="Horizontal">
                     <TextBlock >Products count:</TextBlock>
                     <TextBlock Margin="5, 0, 0, 0" Text="{Binding Storage.ProductsCount}"></TextBlock>
                 </StackPanel>
