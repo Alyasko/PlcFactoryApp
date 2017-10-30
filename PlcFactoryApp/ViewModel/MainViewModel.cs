@@ -4,6 +4,8 @@ using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using PlcFactoryApp.Core;
+using PlcFactoryApp.Core.Config;
+using PlcFactoryApp.Core.Models;
 using PlcFactoryApp.ViewModel.UserControls;
 
 namespace PlcFactoryApp.ViewModel
@@ -52,6 +54,11 @@ namespace PlcFactoryApp.ViewModel
                 Storage = new StorageIndicatorViewModel();
                 MainWindowCommands = new MainWindowCommands(this);
                 MainWindowCommands.CountersImplementation = new CountersImplementation(null);
+
+                if (ConfigProvider.Value.Exists)
+                {
+                    Storage.PinConfig = ConfigProvider.Value.Load().PinConfig;
+                }
             }
             catch (Exception e)
             {
@@ -70,6 +77,8 @@ namespace PlcFactoryApp.ViewModel
         }
 
         public string Title { get; set; }
+
+        public static Lazy<IConfigProvider> ConfigProvider = new Lazy<IConfigProvider>(() => new ConfigProvider());
 
         private StorageIndicatorViewModel _storage;
         public StorageIndicatorViewModel Storage

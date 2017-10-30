@@ -7,6 +7,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using PlcFactoryApp.Core;
+using PlcFactoryApp.Core.Config;
 using PlcFactoryApp.ViewModel.Contracts;
 
 namespace PlcFactoryApp.ViewModel
@@ -37,6 +38,11 @@ namespace PlcFactoryApp.ViewModel
                     PlcSimulator.ResetAll();
 
                     _vm.IsEditMode = false;
+
+                    MainViewModel.ConfigProvider.Value.Save(new ConfigModel()
+                    {
+                        PinConfig = PlcSimulator.PinConfig
+                    });
                 }
                 catch (Exception e)
                 {

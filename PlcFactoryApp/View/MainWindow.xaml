@@ -25,6 +25,7 @@
         <Menu Grid.ColumnSpan="2">
             <MenuItem Header="Simulator">
                 <MenuItem Header="Connect" IsEnabled="{Binding IsEditMode}" Command="{Binding MainWindowCommands.ConnectCommand}"></MenuItem>
+                <MenuItem Header="Disconnect" IsEnabled="{Binding IsNotEditMode}" Command="{Binding MainWindowCommands.DisconnectCommand}"></MenuItem>
             </MenuItem>
         </Menu>
 
